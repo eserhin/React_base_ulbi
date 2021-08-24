@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import './styles/App.css'
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
+import PostForm from "./components/PostForm";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -11,29 +10,19 @@ function App() {
         {id: '3', title: 'JS3', body: "Post number3"}
     ]);
 
-    const [post, setPost] = useState({title : '', body : ''});
-
-    const addNewPost = (e) => {
-        e.preventDefault();
-        setPosts([...posts, {...post, id: Date.now()}]);
-        setPost({title : '', body : ''})
+    const createPost = (newPost) => {
+        setPosts([...posts, newPost])
     };
+    const removePost = (post) => {
+        setPosts(posts.filter(p => p.id !== post.id))
+    };
+
     return (
         <div className='App'>
-            <form action="">
-                <MyInput
-                    value={post.title}
-                    onChange={e => setPost({...post, title : e.target.value})}
-                    type='text'
-                    placeholder='Название поста'/>
-                <MyInput
-                    value={post.body}
-                    onChange={e =>  setPost({...post, body : e.target.value})}
-                    type='text'
-                    placeholder='Описание поста'/>
-                <MyButton onClick={addNewPost}>Создать пост</MyButton>
-            </form>
-            <PostList posts={posts} title="Список постов 1"/>
+            <PostForm create={createPost}/>
+            {posts.length === 0 ?
+                <div>Постов нет</div> :
+                <PostList posts={posts} title="Список постов 1" remove={removePost}/>}
         </div>
     );
 }
