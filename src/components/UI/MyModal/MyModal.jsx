@@ -2,7 +2,6 @@ import React from 'react';
 import cl from './MyModal.module.css'
 
 const MyModal = ({children, visible, setVisible}) => {
-    debugger;
     const rootClasses = [cl.myModal];
     if (visible) {
         rootClasses.push(cl.active);
