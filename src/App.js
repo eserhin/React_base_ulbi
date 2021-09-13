@@ -3,6 +3,8 @@ import './styles/App.css'
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/MyModal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -11,7 +13,9 @@ function App() {
         {id: '3', title: 'JS3', body: "Post number3"}
     ]);
 
-    const [filter, setFilter] = useState({sort: '',query:''});
+    const [filter, setFilter] = useState({sort: '', query: ''});
+
+    const [modal, setModal] = useState(false);
 
     const sortedPosts = useMemo(() => {
         if (filter.sort) {
@@ -26,6 +30,7 @@ function App() {
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
+        setModal(false);
     };
     const removePost = (post) => {
         setPosts(posts.filter(p => p.id !== post.id))
@@ -33,13 +38,15 @@ function App() {
 
     return (
         <div className='App'>
-            <PostForm create={createPost}/>
+            <MyButton style = {{marginTop: 30}} onClick = {()=>setModal(true)}>
+                Создать пользователя
+            </MyButton>
+            <MyModal visible={modal} setVisible={setModal}>
+                <PostForm create={createPost}/>
+            </MyModal>
             <hr/>
-            <PostFilter filter = {filter} setFilter = {setFilter}/>
-            {sortedAndSearchedPosts.length ?
-                <PostList posts={sortedAndSearchedPosts} title="Список постов 1" remove={removePost}/> :
-                <h1 style={{textAlign: 'center'}}>Постов нет</h1>}
-
+            <PostFilter filter={filter} setFilter={setFilter}/>
+            <PostList posts={sortedAndSearchedPosts} title="Список постов 1" remove={removePost}/>
         </div>
     );
 }
